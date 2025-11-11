@@ -34,11 +34,10 @@
                                 <td>AB{{ str_pad($p->id_produk, 3, '0', STR_PAD_LEFT) }}</td>
                                 <td>
                                     @if($p->gambar)
-    <img src="{{ asset('images/'.$p->gambar) }}" alt="Gambar Produk" class="img-thumbnail" width="70">
-@else
-    <span class="text-muted">Tidak ada gambar</span>
-@endif
-
+                                        <img src="{{ asset('images/'.$p->gambar) }}" alt="Gambar Produk" class="img-thumbnail" width="70">
+                                    @else
+                                        <span class="text-muted">Tidak ada gambar</span>
+                                    @endif
                                 </td>
                                 <td>{{ $p->nama_produk }}</td>
                                 <td>{{ number_format($p->harga_per_produk, 0, ',', '.') }}</td>
@@ -48,12 +47,12 @@
                                     <a href="{{ route('produk.edit', $p->id_produk) }}" class="btn btn-success btn-sm">
                                         <i class="fa fa-edit"></i> Edit
                                     </a>
-                                    <form action="{{ route('produk.destroy', $p->id_produk) }}" method="POST" class="d-inline">
-                                        @csrf @method('DELETE')
-                                        <button type="button" class="btn btn-danger btn-sm" onclick="confirmDelete(this)">
-                                            <i class="fa fa-trash"></i> Delete
-                                        </button>
-                                    </form>
+                                    <button type="button" class="btn btn-danger btn-sm"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#deleteModal"
+                                            data-form="{{ route('produk.destroy', $p->id_produk) }}">
+                                        <i class="fa fa-trash"></i> Delete
+                                    </button>
                                 </td>
                             </tr>
                         @empty
@@ -68,12 +67,38 @@
     </div>
 </div>
 
-<!-- Konfirmasi delete pakai JS -->
+<!-- Modal Konfirmasi Hapus -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content text-center">
+      <div class="modal-header border-0">
+        <h5 class="modal-title fw-bold" id="deleteModalLabel">Hapus Produk</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div class="display-1 text-danger mb-3">!</div>
+        <p>Apakah kamu akan menghapus produk ini?</p>
+      </div>
+      <div class="modal-footer justify-content-center border-0">
+        <form id="deleteForm" method="POST">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="btn btn-danger fw-bold px-4">Hapus</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
-function confirmDelete(button) {
-    if (confirm('Yakin ingin menghapus produk ini?')) {
-        button.closest('form').submit();
-    }
-}
+document.addEventListener('DOMContentLoaded', function() {
+    const deleteModal = document.getElementById('deleteModal');
+    deleteModal.addEventListener('show.bs.modal', function (event) {
+        const button = event.relatedTarget;
+        const formAction = button.getAttribute('data-form');
+        const deleteForm = document.getElementById('deleteForm');
+        deleteForm.setAttribute('action', formAction);
+    });
+});
 </script>
 @endsection

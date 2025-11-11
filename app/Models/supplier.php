@@ -19,10 +19,7 @@ class Supplier extends Model
         'nama_supplier',
     ];
 
-    /**
-     * Relasi ke Produk
-     * (1 supplier bisa punya banyak produk)
-     */
+   
     public function produk()
     {
         return $this->hasMany(Produk::class, 'id_supplier', 'id_supplier');

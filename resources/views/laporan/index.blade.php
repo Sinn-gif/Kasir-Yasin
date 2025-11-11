@@ -22,7 +22,7 @@
                         <button class="btn fw-bold text-white px-4" style="background-color:#00A6FF;">
                             Cari
                         </button>
-                        <a href="{{ route('laporan.index') }}" class="btn btn-secondary fw-bold px-4">
+                        <a href="{{ route('laporan.index') }}" class="btn btn-danger fw-bold px-4">
                             Reset
                         </a>
                     </div>

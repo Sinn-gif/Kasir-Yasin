@@ -8,17 +8,12 @@ use App\Http\Controllers\Controller;
 
 class LoginController extends Controller
 {
-    /**
-     * Tampilkan halaman login kasir
-     */
+ 
     public function showLoginForm()
     {
         return view('auth.login');
     }
 
-    /**
-     * Proses login kasir
-     */
     public function login(Request $request)
     {
         // Validasi input
@@ -31,7 +26,6 @@ class LoginController extends Controller
 
         // Login pakai guard kasir
         if (Auth::guard('kasir')->attempt($credentials, $request->filled('remember'))) {
-            // Regenerate session untuk keamanan
             $request->session()->regenerate();
 
             // Redirect ke dashboard
@@ -44,14 +38,11 @@ class LoginController extends Controller
         ])->withInput();
     }
 
-    /**
-     * Logout kasir
-     */
+
     public function logout(Request $request)
     {
         Auth::guard('kasir')->logout();
 
-        // Invalidasi session
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 

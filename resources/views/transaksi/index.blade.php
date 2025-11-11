@@ -10,7 +10,7 @@
         <!-- Daftar Produk -->
         <div class="col-md-6">
             <div class="card shadow-sm mb-3">
-                <div class="card-header bg-primary text-white fw-bold">
+                <div class="card-header bg-success text-white fw-bold">
                     Daftar Produk
                 </div>
                 <div class="card-body">
@@ -81,7 +81,7 @@
 <div class="modal fade" id="modalPembayaran" tabindex="-1" aria-labelledby="modalPembayaranLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header bg-primary text-white">
+      <div class="modal-header bg-success text-white">
         <h5 class="modal-title" id="modalPembayaranLabel">Pembayaran</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
@@ -102,7 +102,7 @@
       </div>
 
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Batal</button>
         <button type="button" id="btnKonfirmasiBayar" class="btn btn-success" disabled>Konfirmasi Bayar</button>
       </div>
     </div>

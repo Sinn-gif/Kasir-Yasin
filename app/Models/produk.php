@@ -9,7 +9,7 @@ class Produk extends Model
 {
     use HasFactory;
 
-    // Pastikan nama tabel sesuai dengan migration
+
     protected $table = 'produk';
     protected $primaryKey = 'id_produk';
 
@@ -21,9 +21,7 @@ class Produk extends Model
         'gambar',
     ];
 
-    /**
-     * Relasi ke Supplier
-     */
+    
     public function supplier()
     {
         return $this->belongsTo(Supplier::class, 'id_supplier', 'id_supplier');

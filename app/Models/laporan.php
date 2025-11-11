@@ -18,13 +18,10 @@ class Laporan extends Model
         'periode'
     ];
 
-    /**
-     * Relasi ke Transaksi
-     * Satu laporan hanya punya satu transaksi
-     */
+    
     public function transaksi()
     {
         return $this->belongsTo(Transaksi::class, 'id_transaksi', 'id_transaksi')
-                    ->with(['detailTransaksi.produk']); // otomatis muat detail dan produk
+                    ->with(['detailTransaksi.produk']); 
     }
 }

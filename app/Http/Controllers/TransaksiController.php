@@ -68,14 +68,14 @@ class TransaksiController extends Controller
             $totalTransaksi = 0;
             $totalItemTerjual = 0;
 
-            // 🔹 Buat transaksi utama
+            //transaksi utama
             $transaksi = Transaksi::create([
                 'tanggal' => Carbon::now()->toDateString(),
                 'total_harga' => 0,
-                'id_kasir' => 1, // sesuaikan dengan login kasir kamu
+                'id_kasir' => 1,
             ]);
 
-            // 🔹 Simpan setiap item detail
+            //Simpan setiap item
             foreach ($pesanan as $item) {
                 $produk = Produk::find($item['id']);
                 if (!$produk) continue;
@@ -96,22 +96,22 @@ class TransaksiController extends Controller
                 $totalTransaksi += $subtotal;
                 $totalItemTerjual += $item['qty'];
 
-                // 🔹 Simpan detail transaksi (dengan nama produk agar tidak hilang jika produk dihapus)
+                
                 DetailTransaksi::create([
                     'id_transaksi' => $transaksi->id_transaksi,
                     'id_produk' => $produk->id_produk,
-                    'nama_produk' => $produk->nama_produk, // disimpan di tabel detail
+                    'nama_produk' => $produk->nama_produk,
                     'jumlah_kg' => $item['qty'],
                     'subtotal' => $subtotal,
                 ]);
             }
 
-            // 🔹 Update total transaksi
+            // Update total transaksi
             $transaksi->update([
                 'total_harga' => $totalTransaksi,
             ]);
 
-            // 🔹 Simpan ke laporan
+            // Simpan ke laporan
             Laporan::create([
                 'id_transaksi' => $transaksi->id_transaksi,
                 'jumlah_transaksi' => $totalItemTerjual,

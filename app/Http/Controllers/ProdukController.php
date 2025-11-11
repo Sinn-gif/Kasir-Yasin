@@ -72,9 +72,9 @@ class ProdukController extends Controller
 
         $data = $request->only(['nama_produk', 'harga_per_produk', 'stok_kg', 'id_supplier']);
 
-        // jika ada upload gambar baru
+        // upload gambar baru
         if ($request->hasFile('gambar')) {
-            // hapus gambar lama jika ada
+            // hapus gambar lama 
             if ($produk->gambar && file_exists(public_path('images/' . $produk->gambar))) {
                 unlink(public_path('images/' . $produk->gambar));
             }
