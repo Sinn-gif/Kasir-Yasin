@@ -1,0 +1,30 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Laporan extends Model
+{
+    use HasFactory;
+
+    protected $table = 'laporan';
+    protected $primaryKey = 'id_laporan';
+    protected $fillable = [
+        'id_transaksi',
+        'jumlah_transaksi',
+        'total_penjualan',
+        'periode'
+    ];
+
+    /**
+     * Relasi ke Transaksi
+     * Satu laporan hanya punya satu transaksi
+     */
+    public function transaksi()
+    {
+        return $this->belongsTo(Transaksi::class, 'id_transaksi', 'id_transaksi')
+                    ->with(['detailTransaksi.produk']); // otomatis muat detail dan produk
+    }
+}
