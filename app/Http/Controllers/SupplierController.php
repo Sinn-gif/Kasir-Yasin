@@ -22,12 +22,11 @@ class SupplierController extends Controller
     {
         $request->validate([
             'nama_perusahaan' => 'required',
-            'kontak' => 'required|regex:/^[0-9]+$/',
+            'kontak' => 'required',
             'alamat' => 'required',
             'nama_supplier' => 'required',
         ], [
             'required' => 'Maaf, isi dengan benar.',
-            'regex' => 'Maaf, isi dengan benar.',
         ]);
 
         Supplier::create($request->all());
@@ -45,12 +44,11 @@ class SupplierController extends Controller
     {
         $request->validate([
             'nama_perusahaan' => 'required',
-            'kontak' => 'required|regex:/^[0-9]+$/',
+            'kontak' => 'required',
             'alamat' => 'required',
             'nama_supplier' => 'required',
         ], [
             'required' => 'Maaf, isi dengan benar.',
-            'regex' => 'Maaf, isi dengan benar.',
         ]);
 
         $supplier->update($request->all());
@@ -61,7 +59,9 @@ class SupplierController extends Controller
 
     public function destroy(Supplier $supplier)
     {
+        $supplier->produk()->update(['id_supplier' => null]);
         $supplier->delete();
+
         return redirect()->route('supplier.index')
             ->with('success', 'Supplier berhasil dihapus.');
     }

@@ -5,16 +5,28 @@
 @section('content')
 <div class="container mt-3">
 
+    {{-- 🔥 Notifikasi error dari ProdukController --}}
+    @if(session('error'))
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            {{ session('error') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
+
+    {{-- Notifikasi sukses --}}
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
+
     <div class="d-flex justify-content-between align-items-center mb-3">
         <h3 class="fw-bold mb-0">Supplier</h3>
         <a href="{{ route('supplier.create') }}" class="btn btn-success">
             <i class="fa fa-plus"></i> Tambah Supplier
         </a>
     </div>
-
-    @if(session('success'))
-        <div class="alert alert-success">{{ session('success') }}</div>
-    @endif
 
     <table class="table table-bordered text-center align-middle">
         <thead class="table-danger text-white">
@@ -53,7 +65,7 @@
     </table>
 </div>
 
-<!-- Modal Bootstrap Konfirmasi Hapus -->
+<!-- Modal Hapus -->
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content text-center">
@@ -82,8 +94,7 @@ document.addEventListener('DOMContentLoaded', function() {
     deleteModal.addEventListener('show.bs.modal', function (event) {
         const button = event.relatedTarget;
         const formAction = button.getAttribute('data-form');
-        const deleteForm = document.getElementById('deleteForm');
-        deleteForm.setAttribute('action', formAction);
+        document.getElementById('deleteForm').setAttribute('action', formAction);
     });
 });
 </script>

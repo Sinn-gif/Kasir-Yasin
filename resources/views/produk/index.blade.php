@@ -9,6 +9,24 @@
         </a>
     </div>
 
+    <!-- FORM SEARCH -->
+    <form action="{{ route('produk.index') }}" method="GET" class="mb-3">
+        <div class="input-group">
+            <input type="text" name="search" class="form-control"
+                   placeholder="Cari nama produk / supplier / harga / stok..."
+                   value="{{ request('search') }}">
+            <button class="btn btn-primary" type="submit">
+                <i class="fa fa-search"></i> Search
+            </button>
+
+            @if(request('search'))
+            <a href="{{ route('produk.index') }}" class="btn btn-secondary">
+                Reset
+            </a>
+            @endif
+        </div>
+    </form>
+
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
@@ -19,7 +37,7 @@
                 <table class="table table-bordered align-middle">
                     <thead class="table-danger text-center">
                         <tr>
-                            <th>Kode</th>
+                            <th>ID Produk</th>
                             <th>Gambar</th>
                             <th>Nama Produk</th>
                             <th>Harga / KG</th>
@@ -40,9 +58,17 @@
                                     @endif
                                 </td>
                                 <td>{{ $p->nama_produk }}</td>
-                                <td>{{ number_format($p->harga_per_produk, 0, ',', '.') }}</td>
+                                <td>{{ number_format($p->harga_per_kg, 0, ',', '.') }}</td>
                                 <td>{{ $p->stok_kg }}</td>
-                                <td>{{ $p->supplier->nama_supplier ?? '-' }}</td>
+
+                                <td>
+                                    @if($p->supplier)
+                                        {{ $p->supplier->nama_supplier }}
+                                    @else
+                                        <span class="text-danger fw-bold">Mohon tambahkan supplier</span>
+                                    @endif
+                                </td>
+
                                 <td>
                                     <a href="{{ route('produk.edit', $p->id_produk) }}" class="btn btn-success btn-sm">
                                         <i class="fa fa-edit"></i> Edit
@@ -91,14 +117,23 @@
 </div>
 
 <script>
+// Delete Modal (tetap)
 document.addEventListener('DOMContentLoaded', function() {
     const deleteModal = document.getElementById('deleteModal');
-    deleteModal.addEventListener('show.bs.modal', function (event) {
+    deleteModal.addEventListener('show.bs.modal', function(event) {
         const button = event.relatedTarget;
         const formAction = button.getAttribute('data-form');
         const deleteForm = document.getElementById('deleteForm');
         deleteForm.setAttribute('action', formAction);
     });
 });
+
+// 🔥 SEARCH OTOMATIS TANPA TEKAN ENTER / SEARCH
+const searchInput = document.querySelector('input[name="search"]');
+
+searchInput.addEventListener('keyup', function() {
+    this.form.submit();    // Auto submit form pencarian
+});
 </script>
 @endsection
+

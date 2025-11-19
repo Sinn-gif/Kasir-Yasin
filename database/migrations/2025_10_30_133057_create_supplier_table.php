@@ -10,7 +10,7 @@ return new class extends Migration {
         Schema::create('supplier', function (Blueprint $table) {
             $table->bigIncrements('id_supplier');
             $table->string('nama_perusahaan');
-            $table->integer('kontak');
+            $table->string('kontak');
             $table->string('alamat');
             $table->string('nama_supplier');
             $table->timestamps();

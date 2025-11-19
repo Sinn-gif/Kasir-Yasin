@@ -29,7 +29,7 @@
                                     @endif
 
                                     <h6 class="fw-bold">{{ $item->nama_produk }}</h6>
-                                    <p>Rp {{ number_format($item->harga_per_produk, 0, ',', '.') }}</p>
+                                    <p>Rp {{ number_format($item->harga_per_kg, 0, ',', '.') }} / kg</p>
                                     <p class="text-muted mb-1">
                                         Stok: <span id="stok-{{ $item->id_produk }}">{{ $item->stok_kg }}</span> kg
                                     </p>
@@ -40,7 +40,7 @@
                                         <button class="btn btn-success btn-sm tambah-produk"
                                             data-id="{{ $item->id_produk }}"
                                             data-nama="{{ $item->nama_produk }}"
-                                            data-harga="{{ $item->harga_per_produk }}">
+                                            data-harga="{{ $item->harga_per_kg }}">
                                             <i class="fa fa-plus"></i>
                                         </button>
                                     </div>
@@ -56,7 +56,7 @@
         <!-- Daftar Pesanan -->
         <div class="col-md-6">
             <div class="card shadow-sm mb-3">
-                <div class="card-header bg-success text-white fw-bold">
+                <div class="card-header bg-danger text-white fw-bold">
                     Daftar Pesanan
                 </div>
                 <div class="card-body" id="daftar-pesanan">
@@ -64,7 +64,7 @@
                 </div>
                 <div class="card-footer d-flex justify-content-between align-items-center fw-bold">
                     <span>Total: Rp <span id="total-harga">0</span></span>
-                    <button id="btnBayar" class="btn btn-primary btn-sm" disabled>Bayar</button>
+                    <button id="btnBayar" class="btn btn-success btn-sm" disabled>Bayar</button>
                 </div>
             </div>
         </div>
@@ -132,31 +132,31 @@ function showNotif(text, type='success') {
 document.addEventListener('DOMContentLoaded', function () {
     let pesanan = [];
 
-    // Tambah produk
+    // Tambah produk per 250 gram (0.25 kg)
     document.querySelectorAll('.tambah-produk').forEach(btn => {
         btn.addEventListener('click', function() {
             const id = this.dataset.id;
             const nama = this.dataset.nama;
-            const harga = parseFloat(this.dataset.harga);
+            const hargaPerKg = parseFloat(this.dataset.harga);
             const stokEl = document.getElementById('stok-' + id);
             let stok = parseFloat(stokEl.textContent);
 
-            if (stok <= 0) {
-                showNotif("Stok produk habis!", "danger");
+            if (stok < 0.25) {
+                showNotif("Stok tidak cukup (kurang dari 250 gram)!", "danger");
                 return;
             }
 
-            stokEl.textContent = (stok - 1).toFixed(2);
+            stokEl.textContent = (stok - 0.25).toFixed(2);
 
             let item = pesanan.find(p => p.id === id);
-            if (item) item.qty += 1;
-            else pesanan.push({ id, nama, harga, qty: 1 });
+            if (item) item.qty += 0.25;
+            else pesanan.push({ id, nama, harga: hargaPerKg, qty: 0.25 });
 
             renderPesanan();
         });
     });
 
-    // Kurangi produk
+    // Kurangi produk per 250 gram
     document.querySelectorAll('.kurang-produk').forEach(btn => {
         btn.addEventListener('click', function() {
             const id = this.dataset.id;
@@ -165,8 +165,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
             let item = pesanan.find(p => p.id === id);
             if (item) {
-                item.qty -= 1;
-                stokEl.textContent = (stok + 1).toFixed(2);
+                item.qty -= 0.25;
+                stokEl.textContent = (stok + 0.25).toFixed(2);
                 if (item.qty <= 0) pesanan = pesanan.filter(p => p.id !== id);
             }
 
@@ -191,13 +191,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
         let total = 0;
         pesanan.forEach(item => {
-            total += item.harga * item.qty;
+            const hargaPerTransaksi = item.harga * item.qty; // harga per kg * jumlah kg
+            total += hargaPerTransaksi;
 
             const div = document.createElement('div');
             div.classList.add('d-flex','justify-content-between','align-items-center','mb-2');
             div.innerHTML = `
-                <span>${item.nama} x${item.qty}</span>
-                <span>Rp ${new Intl.NumberFormat('id-ID').format(item.harga * item.qty)}</span>
+                <span>${item.nama} x ${(item.qty * 1000).toFixed(0)} gram</span>
+                <span>Rp ${new Intl.NumberFormat('id-ID').format(hargaPerTransaksi)}</span>
             `;
             daftarPesanan.appendChild(div);
         });
@@ -249,17 +250,11 @@ document.addEventListener('DOMContentLoaded', function () {
         })
         .then(res => res.json())
         .then(data => {
-            // Tutup modal pembayaran
             modal.hide();
-
-            // Reset pesanan
             pesanan = [];
             renderPesanan();
-
-            // Tampilkan modal berhasil
             modalBerhasil.show();
 
-            // Tombol simpan menuju laporan
             document.getElementById('btnSimpan').addEventListener('click', () => {
                 modalBerhasil.hide();
                 window.location.href = "{{ route('laporan.index') }}";
@@ -270,7 +265,6 @@ document.addEventListener('DOMContentLoaded', function () {
             showNotif("Terjadi kesalahan!", "danger");
         });
     });
-
 });
 </script>
 @endsection

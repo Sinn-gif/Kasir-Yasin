@@ -35,7 +35,7 @@ class TransaksiController extends Controller
             $cart[$request->id_produk] = [
                 'id' => $produk->id_produk,
                 'nama' => $produk->nama_produk,
-                'harga' => $produk->harga_per_produk,
+                'harga' => $produk->harga_per_kg,
                 'qty' => $request->qty,
             ];
         }
@@ -92,7 +92,7 @@ class TransaksiController extends Controller
                 $produk->save();
 
                 // Hitung subtotal
-                $subtotal = $produk->harga_per_produk * $item['qty'];
+                $subtotal = $produk->harga_per_kg * $item['qty'];
                 $totalTransaksi += $subtotal;
                 $totalItemTerjual += $item['qty'];
 

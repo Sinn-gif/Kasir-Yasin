@@ -11,7 +11,7 @@ return new class extends Migration {
             $table->bigIncrements('id_detail');
             $table->unsignedBigInteger('id_transaksi');
             $table->unsignedBigInteger('id_produk')->nullable();
-            $table->string('nama_produk')->nullable(); // simpan nama produk biar tetap tampil walau produk dihapus
+            $table->string('nama_produk')->nullable();
             $table->decimal('jumlah_kg', 10, 2);
             $table->decimal('subtotal', 12, 2);
             $table->timestamps();

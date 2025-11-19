@@ -28,10 +28,10 @@
 
                     <div class="col-md-6 mb-3">
                         <label class="form-label">Harga per KG</label>
-                        <input type="number" step="0.01" name="harga_per_produk"
-                            class="form-control @error('harga_per_produk') is-invalid @enderror"
-                            value="{{ old('harga_per_produk') }}" required>
-                        @error('harga_per_produk')
+                        <input type="number" step="0.01" name="harga_per_kg"
+                            class="form-control @error('harga_per_kg') is-invalid @enderror"
+                            value="{{ old('harga_per_kg') }}" required>
+                        @error('harga_per_kg')
                             <small class="text-danger">{{ $message }}</small>
                         @enderror
                     </div>

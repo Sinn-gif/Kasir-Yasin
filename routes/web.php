@@ -8,10 +8,14 @@ use App\Http\Controllers\ProdukController;
 use App\Http\Controllers\TransaksiController;
 use App\Http\Controllers\LaporanController;
 
-// route login dan logout
-Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login.form');
+// Halaman login
+Route::get('/', [LoginController::class, 'showLoginForm'])->name('login.form');
+Route::get('/login', [LoginController::class, 'showLoginForm']);
 Route::post('/login', [LoginController::class, 'login'])->name('login');
+// Logout
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
+
 
 // yang sudah login
 Route::middleware('auth:kasir')->group(function () {
@@ -33,7 +37,8 @@ Route::get('/produk/create', [ProdukController::class, 'create'])->name('produk.
 Route::post('/produk', [ProdukController::class, 'store'])->name('produk.store');             
 Route::get('/produk/{produk}/edit', [ProdukController::class, 'edit'])->name('produk.edit');  
 Route::put('/produk/{produk}', [ProdukController::class, 'update'])->name('produk.update');   
-Route::delete('/produk/{produk}', [ProdukController::class, 'destroy'])->name('produk.destroy'); 
+Route::delete('/produk/{produk}', [ProdukController::class, 'destroy'])->name('produk.destroy');
+
 
     //route Transaksi
 Route::get('/transaksi', [TransaksiController::class, 'index'])->name('transaksi.index');

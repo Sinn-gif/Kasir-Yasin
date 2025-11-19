@@ -6,7 +6,7 @@
 <div class="container mt-3">
     <h3 class="fw-bold mb-4">Laporan</h3>
 
-    <!-- FILTER TANGGAL -->
+    <!--TANGGAL -->
     <div class="card shadow-sm mb-4">
         <div class="card-body">
             <form action="{{ route('laporan.index') }}" method="GET">
@@ -19,7 +19,7 @@
                     </div>
 
                     <div class="col-md-8 d-flex justify-content-end gap-2">
-                        <button class="btn fw-bold text-white px-4" style="background-color:#00A6FF;">
+                        <button class="btn fw-bold text-white px-4" style="background-color:#1aee0f;">
                             Cari
                         </button>
                         <a href="{{ route('laporan.index') }}" class="btn btn-danger fw-bold px-4">
@@ -32,17 +32,18 @@
     </div>
 
     <!-- TABEL LAPORAN -->
-    <div class="table-responsive">
-        <table class="table table-bordered text-center align-middle" style="border: 3px solid #00A6FF;">
-            <thead style="background-color: #FF2C2C; color: white;">
-                <tr>
-                    <th>Tanggal</th>
-                    <th>No Transaksi</th>
-                    <th>Nama Produk</th>
-                    <th>Jumlah Terjual</th>
-                    <th>Total</th>
-                </tr>
-            </thead>
+   <div class="table-responsive">
+    <table class="table table-bordered text-center align-middle border-3 border-primary">
+        <thead class="table-danger text-white">
+            <tr>
+                <th>Tanggal</th>
+                <th>ID Transaksi</th>
+                <th>Nama Produk</th>
+                <th>Jumlah Terjual</th>
+                <th>Total</th>
+            </tr>
+        </thead>
+
 
             <tbody>
                 @forelse ($transaksi as $trx)
@@ -54,9 +55,9 @@
                                         {{ $trx->tanggal }}
                                     </td>
                                     <td rowspan="{{ $trx->detailTransaksi->count() }}">
-                                        {{ $trx->id_transaksi }}
+                                        {{ 'TR' . str_pad($trx->id_transaksi, 4, '0', STR_PAD_LEFT) }}
                                     </td>
-                                    <!-- ✅ Gunakan nama_produk dari detail_transaksi -->
+                                    <!-- ngambil nama produk di detail_transaksi -->
                                     <td>{{ $detail->nama_produk ?? $detail->produk->nama_produk ?? '-' }}</td>
                                     <td>{{ number_format($detail->jumlah_kg, 2, ',', '.') }} KG</td>
                                     <td rowspan="{{ $trx->detailTransaksi->count() }}">
@@ -71,7 +72,7 @@
                     @else
                         <tr>
                             <td>{{ $trx->tanggal }}</td>
-                            <td>{{ $trx->id_transaksi }}</td>
+                            <td>{{ 'TR' . str_pad($trx->id_transaksi, 4, '0', STR_PAD_LEFT) }}</td>
                             <td>-</td>
                             <td>-</td>
                             <td>Rp{{ number_format($trx->total_harga, 0, ',', '.') }}</td>
